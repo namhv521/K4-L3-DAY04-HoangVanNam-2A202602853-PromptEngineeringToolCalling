@@ -1,7 +1,108 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Ten original IT helpdesk cases: five single-turn and five multi-turn cases, frozen before the v3 group run.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_printer_service_status",
+      "phase": "B",
+      "query": "Hệ thống in ấn production của công ty có đang hoạt động bình thường không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "printing", "environment": "production"}}]},
+      "metadata": {"what_it_tests": "Phân biệt trạng thái dịch vụ in dùng chung với kiểm tra một máy in."}
+    },
+    {
+      "id": "G02_device_security_check",
+      "phase": "B",
+      "query": "Kiểm tra tình trạng bảo mật của máy LT-205.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-205", "check": "security"}}]},
+      "metadata": {"what_it_tests": "Truyền đúng asset ID và miền kiểm tra security."}
+    },
+    {
+      "id": "G03_ticket_policy",
+      "phase": "B",
+      "query": "Tra chính sách nội bộ về mức ưu tiên khi tạo ticket sự cố.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "ticketing"}}]},
+      "metadata": {"what_it_tests": "Tra chính sách thay vì tạo ticket hoặc tìm KB."}
+    },
+    {
+      "id": "G04_missing_employee_id",
+      "phase": "B",
+      "query": "Tra giúp tài khoản nhân viên của tôi đang bật MFA chưa.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"what_it_tests": "Không tự đoán employee ID khi tra cứu tài khoản."}
+    },
+    {
+      "id": "G05_out_of_scope_weather",
+      "phase": "B",
+      "query": "Ngày mai ở Đà Nẵng có mưa không?",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Không gọi công cụ Helpdesk cho yêu cầu ngoài phạm vi."}
+    },
+    {
+      "id": "G06_multiturn_device_scope",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra máy tính của tôi."},
+        {"role": "user", "content": "Mã tài sản là DT-031."},
+        {"role": "user", "content": "Chỉ kiểm tra phần cứng."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "DT-031", "check": "hardware"}}]},
+      "metadata": {"what_it_tests": "Mang asset ID qua lượt và dùng phạm vi kiểm tra mới nhất."}
+    },
+    {
+      "id": "G07_multiturn_change_service",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra Wi-Fi staging."},
+        {"role": "user", "content": "Đổi sang SSO nhé."},
+        {"role": "user", "content": "Giữ nguyên môi trường staging."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "sso", "environment": "staging"}}]},
+      "metadata": {"what_it_tests": "Dùng service mới nhất và giữ environment từ hội thoại."}
+    },
+    {
+      "id": "G08_multiturn_cancel_ticket",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi máy in phòng họp, ưu tiên medium."},
+        {"role": "assistant", "content": "Bạn xác nhận tạo ticket với nội dung trên chứ?"},
+        {"role": "user", "content": "Không, hủy yêu cầu đó."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Không tạo ticket sau khi người dùng hủy."}
+    },
+    {
+      "id": "G09_multiturn_reconfirm_changed_priority",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket laptop LT-204 không vào được VPN, ưu tiên medium."},
+        {"role": "assistant", "content": "Bạn xác nhận tạo ticket cho LT-204 với priority medium chứ?"},
+        {"role": "user", "content": "Tôi xác nhận, nhưng đổi priority thành high."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"what_it_tests": "Thay đổi payload làm xác nhận cũ mất hiệu lực."}
+    },
+    {
+      "id": "G10_multiturn_kb_topic_change",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm hướng dẫn sửa lỗi Wi-Fi Windows."},
+        {"role": "user", "content": "Không, tôi cần hướng dẫn xử lý Outlook profile."},
+        {"role": "user", "content": "Chỉ tìm bài về email mới nhất đó."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "email"}}]},
+      "metadata": {"what_it_tests": "Tôn trọng chủ đề mới nhất trong hội thoại nhiều lượt."}
+    }
+  ]
 }
