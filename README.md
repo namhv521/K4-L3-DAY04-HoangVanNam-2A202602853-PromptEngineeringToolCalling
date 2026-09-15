@@ -92,3 +92,235 @@ Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provide
 Buổi học: **17:30–21:00**. 17:30–17:40 giới thiệu, 17:40–17:50 Kahoot, 17:50–20:25 làm nhóm, 20:25–21:00 demo. Mốc kiểm tra tại lớp là 20:25; xem [CHECKPOINTS.md](CHECKPOINTS.md).
 
 Hạn mặc định là **23:59 ngày học, Asia/Ho_Chi_Minh (UTC+07:00)**. Xem [SUBMISSION.md](SUBMISSION.md) và [RULES.md](RULES.md) để biết bản chốt và quy định nộp muộn.
+
+## Phân công và checkpoint cho nhóm 4 người
+
+Chi tiết cách thực hiện của từng vai trò nằm trong [PHAN_CONG_4_THANH_VIEN.txt](PHAN_CONG_4_THANH_VIEN.txt). Mỗi checkpoint chỉ được đánh dấu hoàn thành khi có file, run, transcript hoặc commit để đối chiếu.
+
+### Người 1 — Nhóm trưởng và Prompt Engineer
+
+Phụ trách `system_prompt.md`, run base v0–v3, `version_log.csv`, tích hợp branch và chốt bản nộp.
+
+#### CP0 — 18:00: Khởi tạo và phân công
+
+- [ ] Repo nhóm đúng tên quy định.
+- [ ] `TEAM.md` có đủ bốn thành viên và vai trò.
+- [ ] Đã thống nhất provider và branch của từng người.
+- [ ] Preflight provider chạy thành công.
+
+**Điều kiện PASS:** Repo sẵn sàng, mỗi người biết branch và file mình phụ trách.
+
+#### CP1 — 18:20: Baseline v0
+
+- [ ] v0 được chạy trước khi sửa `system_prompt.md` hoặc `tools.yaml`.
+- [ ] Có file run v0.
+- [ ] `provider_error_cases == 0`.
+- [ ] `measured_cases == total_cases`.
+- [ ] Đã liệt kê các failure chính của v0.
+
+**Điều kiện PASS:** Có baseline hợp lệ để so sánh các version sau.
+
+#### CP2 — 19:05: Hoàn thành v1–v3
+
+- [ ] Mỗi version kiểm tra một giả thuyết chính.
+- [ ] Có run v1, v2 và v3 trên cùng bộ base cases.
+- [ ] Prompt cuối không hard-code case ID.
+- [ ] `version_log.csv` có hash, thay đổi, metric và đường dẫn run.
+
+**Điều kiện PASS:** Bốn version có evidence thật và so sánh được.
+
+#### CP3 — 19:30: Tích hợp evidence
+
+- [ ] Đã nhận kết quả safety từ Người 2.
+- [ ] Đã nhận group eval và transcript từ Người 3.
+- [ ] Đã thông báo artifact version cuối cho Người 4.
+- [ ] Không còn conflict ở `system_prompt.md` và `tools.yaml`.
+
+**Điều kiện PASS:** Tất cả evidence sử dụng cùng artifact v3.
+
+#### CP4 — 20:10: Review bản nộp
+
+- [ ] Đã merge các branch kỹ thuật.
+- [ ] Đã kiểm tra run path và report link.
+- [ ] Không có `.env`, key, `.venv`, cache hoặc ticket phát sinh.
+- [ ] Mỗi thành viên có commit kỹ thuật.
+
+**Điều kiện PASS:** Branch chung chạy được và truy vết được đóng góp.
+
+#### FINAL — 20:25
+
+- [ ] Chốt branch và commit nộp bài.
+- [ ] Ghi commit chốt vào `TEAM.md`.
+- [ ] Cả nhóm thống nhất một URL repo.
+- [ ] Nhắc từng thành viên tự nộp URL trên VLearn.
+
+### Người 2 — Tool Contract và Safety Engineer
+
+Phụ trách `tools.yaml`, đối chiếu tool registry, xác nhận hành động, bảo vệ dữ liệu và run adversarial.
+
+#### CP0 — 18:00: Nhận phạm vi
+
+- [ ] Tạo branch `member-2-tools-safety`.
+- [ ] Đọc `tools.yaml`, `tools/__init__.py` và các `TOOL.md`.
+- [ ] Chốt không đổi tên các built-in tool.
+
+#### CP1 — 18:20: Tool contract
+
+- [ ] Đối chiếu tên tool với `TOOL_FUNCTIONS`.
+- [ ] Xác định input bắt buộc, enum, output và side effect.
+- [ ] Đánh dấu `create_ticket` cần xác nhận.
+- [ ] Xác định dữ liệu cấm gửi ra `search_device_info`.
+
+**Điều kiện PASS:** Có danh sách những description/schema chưa rõ hoặc lệch code.
+
+#### CP2 — 19:05: Hoàn thiện `tools.yaml`
+
+- [ ] Description phân biệt rõ các tool gần nhau.
+- [ ] Schema khớp implementation.
+- [ ] Có quy tắc `clarify` khi thiếu input.
+- [ ] Có quy tắc xác nhận, sửa và hủy cho `create_ticket`.
+- [ ] Phối hợp Người 1 chạy lại sau thay đổi.
+
+**Điều kiện PASS:** `tools.yaml` được eval chấp nhận và có run đối chiếu.
+
+#### CP3 — 19:30: Safety evidence
+
+- [ ] Chạy đủ 12 adversarial cases.
+- [ ] Run không có provider error và đo đủ cases.
+- [ ] Phân tích ít nhất ba case gồm expected, actual, trace và rủi ro.
+- [ ] Transcript không chứa dữ liệu bị cấm.
+
+**Điều kiện PASS:** Có run adversarial và analysis với đường dẫn cụ thể.
+
+#### CP4 — 20:10: Bàn giao
+
+- [ ] Gửi run và analysis cho Người 1 và Người 4.
+- [ ] Kiểm tra UI không tự đặt `confirmed=true`.
+- [ ] Kiểm tra UI không che tool error.
+- [ ] Commit phần kỹ thuật của mình.
+
+#### FINAL — 20:25
+
+- [ ] Tự viết mục `INDIVIDUAL` trong `TEAM.md`.
+- [ ] Ghi file, commit hoặc PR thật.
+- [ ] Xác nhận không có key hoặc dữ liệu thật.
+
+### Người 3 — Evaluation và Transcript Engineer
+
+Phụ trách `eval_group.json`, group run, phân tích kết quả và transcript bắt buộc.
+
+#### CP0 — 18:00: Nhận phạm vi
+
+- [ ] Tạo branch `member-3-eval-transcripts`.
+- [ ] Đọc schema của base eval và sample group eval.
+- [ ] Lập danh sách 10 case mới không trùng bộ có sẵn.
+
+#### CP1 — 18:20: Chốt group cases
+
+- [ ] `eval_group.json` có đúng 10 case.
+- [ ] Có năm single-turn và năm multi-turn.
+- [ ] Mỗi case có `id`, `phase`, `failure_type` và `expect`.
+- [ ] JSON parse thành công.
+
+**Điều kiện PASS:** Bộ case đã chốt; không sửa expected sau khi xem run.
+
+#### CP2 — 19:05: Validate và chuẩn bị transcript
+
+- [ ] Expected tool tồn tại trong declaration và registry.
+- [ ] Cases phủ routing, args, missing info, multi-turn và cancel/confirm.
+- [ ] Chốt bốn kịch bản live chat.
+- [ ] Chuẩn bị lệnh group eval dùng version v3.
+
+**Điều kiện PASS:** `run_eval.py` tải được toàn bộ cases không lỗi schema.
+
+#### CP3 — 19:30: Chạy evidence
+
+- [ ] Chạy group eval bằng artifact v3, không có provider error.
+- [ ] Có transcript cho yêu cầu bình thường.
+- [ ] Có transcript cho trường hợp thiếu thông tin.
+- [ ] Có transcript multi-turn với thông tin được sửa.
+- [ ] Có transcript tạo ticket được xác nhận hoặc hủy.
+
+**Điều kiện PASS:** Run và transcript đều có artifact version và tool trace.
+
+#### CP4 — 20:10: Phân tích và bàn giao
+
+- [ ] Tổng hợp metric và các case lỗi.
+- [ ] Đã đọc tool result/error, không chỉ nhìn routing PASS.
+- [ ] Chọn kịch bản demo và fallback transcript.
+- [ ] Gửi link evidence cho Người 1 và Người 4.
+- [ ] Commit phần kỹ thuật của mình.
+
+#### FINAL — 20:25
+
+- [ ] Tự viết mục `INDIVIDUAL` trong `TEAM.md`.
+- [ ] Ghi rõ case, run và transcript mình làm.
+- [ ] Kiểm tra transcript không chứa secret hoặc dữ liệu thật.
+
+### Người 4 — UI/UX và Report Engineer
+
+Phụ trách UI Streamlit, hướng dẫn chạy, transcript trên UI và `REPORT.md`.
+
+#### CP0 — 18:00: Chốt UI tối thiểu
+
+- [ ] Tạo branch `member-4-ui-report`.
+- [ ] Chốt tái sử dụng `run_model_tool_loop()`.
+- [ ] UI gồm sidebar, chat, tool trace và transcript.
+- [ ] Không thêm login, database hoặc dashboard không cần thiết.
+
+#### CP1 — 18:20: UI skeleton
+
+- [ ] Mở được trang Streamlit.
+- [ ] Có provider, model và version controls.
+- [ ] Có lịch sử chat và ô nhập.
+- [ ] Có empty state và thông báo thiếu cấu hình.
+
+**Điều kiện PASS:** `streamlit run ui.py` mở giao diện không crash.
+
+#### CP2 — 19:05: Kết nối agent thật
+
+- [ ] UI gọi đúng agent và tool registry hiện có.
+- [ ] Hiển thị assistant response.
+- [ ] Hiển thị tool name, input JSON và result/error.
+- [ ] Hiển thị `artifact_version`.
+- [ ] Không log hoặc hiển thị API key.
+
+**Điều kiện PASS:** Một câu hỏi thật tạo được trace đầy đủ trên UI.
+
+#### CP3 — 19:30: UX và transcript
+
+- [ ] Hiện các trạng thái `waiting_for_user`, `provider_error` và `max_tool_rounds`.
+- [ ] JSON dài được đặt trong expander.
+- [ ] Success, warning và error có màu lẫn nhãn rõ ràng.
+- [ ] Có xóa phiên và tải transcript.
+- [ ] Tạo ticket không bỏ qua bước xác nhận.
+
+**Điều kiện PASS:** UI hiển thị được cả luồng thành công và luồng lỗi.
+
+#### CP4 — 20:10: README và report
+
+- [ ] `requirements.txt` có dependency UI.
+- [ ] README có lệnh cài đặt và chạy UI.
+- [ ] Một thành viên khác đã chạy UI theo README.
+- [ ] `REPORT.md` đã điền các mục cần thiết.
+- [ ] Mỗi nhận xét có link file, run, transcript hoặc commit thật.
+- [ ] Commit phần kỹ thuật của mình.
+
+#### FINAL — 20:25
+
+- [ ] Tự viết mục `INDIVIDUAL` trong `TEAM.md`.
+- [ ] Ghi rõ UI, README, report và commit mình làm.
+- [ ] Chuẩn bị UI live và transcript dự phòng cho demo.
+
+### Checkpoint chung trước khi nộp
+
+- [ ] Có đủ v0, v1, v2, v3 và `version_log.csv`.
+- [ ] Có đúng 10 group cases: năm single-turn và năm multi-turn.
+- [ ] Có run 12 adversarial cases và phân tích ít nhất ba case.
+- [ ] Mọi run evidence không có provider error.
+- [ ] UI hiển thị tool, input, result/error và version.
+- [ ] Có transcript cho bốn luồng bắt buộc.
+- [ ] `REPORT.md` và `TEAM.md` liên kết evidence thật.
+- [ ] Mỗi người có commit kỹ thuật và tự viết `INDIVIDUAL`.
+- [ ] Không có `.env`, key, dữ liệu thật, `.venv`, cache hoặc ticket phát sinh.
+- [ ] Cả bốn thành viên tự nộp cùng URL repo trên VLearn.
