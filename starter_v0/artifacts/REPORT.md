@@ -8,7 +8,7 @@
 ## Team
 
 - Team:
-- Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
+- Thành viên và INDIVIDUAL: [https://github.com/namhv521/K4-L3-DAY04-HoangVanNam-2A202602853-PromptEngineeringToolCalling/blob/main/TEAM.md](../../TEAM.md)
 - Members:
 - Provider/model:
 
@@ -435,32 +435,32 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 
 Hoàn thành mục nhận xét chung trong [TEAM.md](../../TEAM.md). Dẫn tới các run, file và commit trong phần B để chứng minh kết quả. Ghi dưới đây đường dẫn tới mục đã hoàn thành:
 
-> Link:
+> Link: https://github.com/namhv521/K4-L3-DAY04-HoangVanNam-2A202602853-PromptEngineeringToolCalling/blob/main/TEAM.md
 
 ## C2. INDIVIDUAL của từng thành viên
 
 Mỗi người tự viết và commit mục INDIVIDUAL của mình trong [TEAM.md](../../TEAM.md), nêu phần việc, bằng chứng kỹ thuật và điều đã học. Không yêu cầu chép lại cùng nội dung ở đây. Mỗi mục phải có file/commit/PR thật, không dùng commit tự đánh giá làm bằng chứng kỹ thuật duy nhất.
 
-> Link các mục INDIVIDUAL:
+> Link các mục INDIVIDUAL: 
 
 ## C3. Final checkout
 
 Chỉ nộp bài khi mọi mục dưới đây đã được kiểm tra trên branch cuối cùng của
 repository chung:
 
-- [ ] `TEAM.md` có đủ họ tên, MSSV, GitHub username và vai trò.
-- [ ] Mỗi thành viên có ít nhất một commit trong lịch sử branch nộp bài.
-- [ ] Phần nhận xét chung trong TEAM.md đã hoàn thành và có evidence.
-- [ ] Mỗi thành viên đã tự viết và commit mục INDIVIDUAL trong TEAM.md.
-- [ ] `system_prompt.md`, `tools.yaml`, version log, runs, eval, transcript, UI
+- [X] `TEAM.md` có đủ họ tên, MSSV, GitHub username và vai trò.
+- [X] Mỗi thành viên có ít nhất một commit trong lịch sử branch nộp bài.
+- [X] Phần nhận xét chung trong TEAM.md đã hoàn thành và có evidence.
+- [X] Mỗi thành viên đã tự viết và commit mục INDIVIDUAL trong TEAM.md.
+- [X] `system_prompt.md`, `tools.yaml`, version log, runs, eval, transcript, UI
       và report đã có trong repository.
-- [ ] Không có `.env`, API key, token, dữ liệu thật, cache hoặc generated ticket.
-- [ ] Nhóm trưởng và mọi thành viên đã thống nhất đúng một URL repository chung.
-- [ ] Nhóm trưởng và mọi thành viên sẽ nộp cùng URL đó trên VLearn.
+- [X] Không có `.env`, API key, token, dữ liệu thật, cache hoặc generated ticket.
+- [X] Nhóm trưởng và mọi thành viên đã thống nhất đúng một URL repository chung.
+- [X] Nhóm trưởng và mọi thành viên sẽ nộp cùng URL đó trên VLearn.
 
 **URL repository chung dùng để nộp:**
 
-> URL:
+> URL: https://github.com/namhv521/K4-L3-DAY04-HoangVanNam-2A202602853-PromptEngineeringToolCalling/tree/main
 
-- [ ] Tên repo đúng mẫu K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling.
-- [ ] Kiểm tra deadline và bản chốt theo [SUBMISSION.md](../../SUBMISSION.md).
+- [X] Tên repo đúng mẫu K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling.
+- [X] Kiểm tra deadline và bản chốt theo [SUBMISSION.md](../../SUBMISSION.md).
