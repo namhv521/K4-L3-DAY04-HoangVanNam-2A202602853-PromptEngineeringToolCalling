@@ -1,7 +1,304 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Team-authored cases for the IT Helpdesk Agent: 5 single-turn and 5 multi-turn. Written against assets, employees, services and knowledge categories that the fixed base suite does not exercise.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_printing_service_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hệ thống in ấn dùng chung ở production có đang bình thường không?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "printing",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_shared_service",
+        "difficulty": "easy",
+        "what_it_tests": "Dịch vụ in ấn dùng chung phải đi vào status tool, không được nhầm sang inspect_device của một máy in cụ thể."
+      }
+    },
+    {
+      "id": "G02_software_check_arg",
+      "phase": "B",
+      "suite": "group",
+      "query": "Xem giúp mình danh sách phần mềm đang cài trên LT-411.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-411",
+              "check": "software"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "device_check_arg",
+        "difficulty": "medium",
+        "what_it_tests": "Người dùng nêu rõ phạm vi phần mềm thì phải chọn check=software, không rà tổng thể."
+      }
+    },
+    {
+      "id": "G03_meeting_room_kb_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Micro trong phòng họp không bắt tiếng, tìm bài hướng dẫn xử lý giúp mình.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "meeting_room"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_howto",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu hướng dẫn thiết bị phòng họp phải vào knowledge base đúng nhóm, không nhảy sang hardware hay inspect_device."
+      }
+    },
+    {
+      "id": "G04_missing_printer_asset",
+      "phase": "B",
+      "suite": "group",
+      "query": "Máy in ở tầng 3 đang treo lệnh in, kiểm tra tình trạng máy đó giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_asset",
+        "difficulty": "medium",
+        "what_it_tests": "Vị trí tầng không phải mã tài sản; phải hỏi lại thay vì đoán máy in nào."
+      }
+    },
+    {
+      "id": "G05_access_policy_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Quy định nội bộ về cấp quyền truy cập cho nhân viên mới nói gì?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "access_control"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_policy",
+        "difficulty": "medium",
+        "what_it_tests": "Câu hỏi về quy định phải dùng policy tool, không dùng search_kb vốn dành cho hướng dẫn khắc phục sự cố."
+      }
+    },
+    {
+      "id": "G06_correct_asset_keep_scope",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tình trạng phần cứng của MB-012."
+        },
+        {
+          "role": "user",
+          "content": "Xin lỗi, mình nhầm máy, phải là LT-411."
+        },
+        {
+          "role": "user",
+          "content": "Vẫn chỉ xem phần cứng thôi nhé."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-411",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Mã máy được sửa ở lượt sau phải thắng mã cũ, trong khi phạm vi kiểm tra vẫn giữ nguyên."
+      }
+    },
+    {
+      "id": "G07_latest_employee_wins",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tra cứu hồ sơ nhân viên EMP-1004."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, không cần người này nữa."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tra trạng thái tài khoản của EMP-1010."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1010"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "latest_intent_replacement",
+        "difficulty": "hard",
+        "what_it_tests": "Yêu cầu bị hủy ở lượt giữa không được thực thi; chỉ ý định mới nhất được dùng."
+      }
+    },
+    {
+      "id": "G08_printer_ticket_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket cho máy in PR-404 bị kẹt giấy, mức medium."
+        },
+        {
+          "role": "user",
+          "content": "Nâng mức ưu tiên lên high vì cả phòng đang chờ in."
+        },
+        {
+          "role": "user",
+          "content": "Đọc lại nội dung và hỏi mình đồng ý trước khi tạo."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi nội dung ticket thay đổi, agent vẫn phải dừng ở ranh giới xác nhận thay vì ghi dữ liệu."
+      }
+    },
+    {
+      "id": "G09_clarify_then_employee",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra giúp mình tài khoản của một bạn bên Engineering."
+        },
+        {
+          "role": "user",
+          "content": "Mã nhân viên là EMP-1006."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ cần tra đúng người đó thôi."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1006"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_fill_employee",
+        "difficulty": "hard",
+        "what_it_tests": "Tên phòng ban ở lượt đầu không phải mã nhân viên; sau khi người dùng bổ sung mã thì phải dùng mã đó, không hỏi lại."
+      }
+    },
+    {
+      "id": "G10_sso_and_device_parallel",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Bên mình đang không đăng nhập được vào hệ thống dùng chung."
+        },
+        {
+          "role": "user",
+          "content": "Sự cố nằm ở môi trường staging, và người báo lỗi dùng máy LT-411."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra cả trạng thái SSO staging lẫn phần bảo mật của đúng máy đó."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-411",
+              "check": "security"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_parallel_two_sources",
+        "difficulty": "hard",
+        "what_it_tests": "Gom thông tin rải qua nhiều lượt thành hai tool call song song, giữ đúng environment và asset đã nêu."
+      }
+    }
+  ]
 }

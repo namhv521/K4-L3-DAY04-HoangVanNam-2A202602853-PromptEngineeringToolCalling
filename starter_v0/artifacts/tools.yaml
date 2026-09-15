@@ -8,53 +8,53 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Hỏi người dùng một câu để lấy thông tin còn thiếu, hoặc để xin xác nhận trước một hành động ghi dữ liệu. Dùng tool này thay vì đoán giá trị, và khi dùng thì không gọi tool nào khác trong cùng lượt."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "Câu hỏi, chỉ hỏi đúng một thông tin còn thiếu"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Luôn điền tường minh. choice khi các đáp án hợp lệ là một danh sách ngắn đã biết, yes_no khi cần người dùng đồng ý hay không, text cho các trường hợp còn lại"}
+        options: {type: array, default: [], items: {type: string}, description: "Bắt buộc khi response_type là choice. Liệt kê đúng các giá trị hợp lệ của tham số đang thiếu"}
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm bài hướng dẫn khắc phục sự cố trong kho tri thức nội bộ. Dùng khi người dùng cần cách xử lý, không dùng để lấy trạng thái dịch vụ hay tình trạng một máy."
     parameters:
       type: object
       properties:
         query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], description: "Chọn nhóm khớp với chủ đề người dùng nêu, kể cả khi họ dùng từ thường ngày hoặc tên sản phẩm. Phạm vi từng nhóm: vpn là kết nối VPN và certificate; email là hộp thư và ứng dụng thư, gồm cài đặt, hồ sơ và gửi nhận; wifi là mạng không dây; printing là in ấn; account là đăng nhập, khóa tài khoản, MFA và quyền truy cập, không dùng cho sự cố của ứng dụng thư; security là mã hóa và bảo mật thiết bị; hardware là phần cứng; software là cài đặt phần mềm; meeting_room là thiết bị phòng họp. Chỉ dùng all khi người dùng không nêu chủ đề nào cụ thể"}
         top_k: {type: integer, default: 3, description: "Số kết quả"}
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Kiểm tra trạng thái một dịch vụ dùng chung của toàn công ty. Dùng khi câu hỏi nói về dịch vụ nói chung, không phải về một thiết bị cụ thể."
     parameters:
       type: object
       properties:
         service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
-        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
+        environment: {type: string, enum: [production, staging], description: "Chỉ có hai môi trường này. Điền tường minh theo môi trường người dùng nêu. Nếu họ nêu một môi trường khác hai giá trị trên, coi như chưa biết và dùng clarify với response_type choice, không tự quy về giá trị gần nhất"}
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Chẩn đoán một thiết bị cụ thể đã biết mã tài sản. Dùng khi sự cố gắn với một máy, không dùng cho dịch vụ dùng chung."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        asset_id: {type: string, description: "Mã tài sản dạng hai chữ cái và số, ví dụ LT-204, DT-031, PR-404. Không phải mã nhân viên EMP-xxxx và không phải mô tả loại máy. Nếu người dùng chưa đưa mã này thì không gọi tool"}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], description: "Chọn nhóm khớp với triệu chứng người dùng mô tả. Khi người dùng gọi tên đúng một nhóm thì dùng chính nhóm đó, kể cả khi họ hỏi nhiều máy cùng lúc; mỗi máy là một lần gọi riêng với cùng nhóm. Chỉ dùng all khi người dùng muốn rà tổng thể và không nêu nhóm nào"}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Tra cứu một nhân viên trong danh bạ hỗ trợ theo mã nhân viên."
     parameters:
       type: object
       properties:
-        employee_id: {type: string, description: "Mã nhân viên"}
+        employee_id: {type: string, description: "Mã nhân viên dạng EMP và bốn chữ số, ví dụ EMP-1003. Tên phòng ban hay chức danh không phải mã nhân viên. Nếu người dùng chưa đưa mã này thì không gọi tool"}
       required: [employee_id]
 
   - name: format_incident_report
-    description: "Trình bày các kết quả đã có thành báo cáo."
+    description: "Trình bày các kết quả ĐÃ thu thập được thành báo cáo. Chỉ dùng dữ liệu từ các tool result trước đó, không gọi lại tool để lấy thêm và không tự bịa nội dung."
     parameters:
       type: object
       properties:
@@ -86,7 +86,7 @@ tools:
       required: [manufacturer, model, query_type]
 
   - name: policy
-    description: "Tìm trong chính sách IT nội bộ."
+    description: "Tìm trong chính sách IT nội bộ. Dùng khi câu hỏi là về quy định, không phải về cách khắc phục sự cố."
     parameters:
       type: object
       properties:
@@ -96,12 +96,12 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Ghi một ticket hỗ trợ vào hệ thống. Đây là hành động ghi dữ liệu và không hoàn tác được, nên chỉ gọi sau khi người dùng đã đồng ý rõ ràng với đúng nội dung ticket hiện tại. Khi chưa có đồng ý đó, hoặc khi nội dung vừa thay đổi sau lần đồng ý gần nhất, hãy dùng clarify với response_type yes_no để xin xác nhận thay vì gọi tool này. Một yêu cầu tạo ticket tự nó chưa phải là xác nhận."
     parameters:
       type: object
       properties:
         summary: {type: string, default: "", description: "Tóm tắt sự cố"}
         priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
         asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
+        confirmed: {type: boolean, default: false, description: "Chỉ đặt true khi người dùng đã nói đồng ý với đúng nội dung ticket đang gửi đi. Trợ lý không tự đặt giá trị này. Không bao giờ gọi tool với confirmed false: nếu chưa có đồng ý thì việc cần làm là clarify với response_type yes_no, không phải gửi một lệnh tạo chưa được xác nhận"}
       required: [summary]
