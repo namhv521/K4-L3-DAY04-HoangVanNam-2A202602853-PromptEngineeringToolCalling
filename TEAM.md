@@ -8,7 +8,7 @@
 - Người đại diện / MSSV: Hoàng Văn Nam / 2A202602853
 - Tên repo: `K4-L3-DAY04-HoangVanNam-2A202602853-PromptEngineeringToolCalling`
 - URL repo: <https://github.com/namhv521/K4-L3-DAY04-HoangVanNam-2A202602853-PromptEngineeringToolCalling>
-- Nhánh và commit chốt: cập nhật theo bản nộp cuối trên GitHub.
+- Nhánh và commit chốt: nhánh `main`, commit `Complete Lab 04 v3`.
 - Deadline: 23:59 ngày 15/09/2026 (Asia/Ho_Chi_Minh).
 
 ## Thành viên và phân công
@@ -18,7 +18,7 @@
 | Hoàng Văn Nam | 2A202602853 | <https://github.com/namhv521> | **Nhóm trưởng, v0 và tích hợp.** Thực hiện CP0–CP1: khởi tạo repo, cài môi trường, chạy preflight, chốt luồng Helpdesk và chạy baseline v0. Quản lý tích hợp, UI, báo cáo, tài liệu, version log và toàn bộ file không được giao riêng cho thành viên khác; kiểm tra bản nộp tại FINAL. | `starter_v0/runs/v0_B_base_...json`, `starter_v0/ui.py`, `starter_v0/ui_models.py`, `starter_v0/app_core.py`, `starter_v0/artifacts/REPORT.md`, `starter_v0/analysis/v0-v3-analysis.md`, `README.md`, `TEAM.md` và các file còn lại. |
 | Nguyễn Hải Hoàng | 2A202602489 | <https://github.com/hoang9605> | **Prompt/Tool Engineer v1.** Thực hiện phần đầu CP2: rà soát prompt và hợp đồng tool, tạo thay đổi v1 theo một giả thuyết rõ ràng, chạy lại cùng bộ base 30 cases, lưu hash/run và phân tích sai tool, sai input, lỗi tool. | `starter_v0/artifacts/versions/v1/system_prompt.md`, `starter_v0/artifacts/tools.yaml`, `starter_v0/runs/v1_B_base_...json`; nội dung phân tích v1. |
 | Lê Tuấn Đạt | 2A202602623 | <https://github.com/TuanDatt08> | **Prompt Engineer v2 và Test Generation.** Thực hiện phần tiếp theo CP2 và CP4: bổ sung quy tắc thiếu thông tin/xác nhận cho v2; thiết kế bộ 10 test nhóm gồm 5 single-turn và 5 multi-turn; chạy group eval và ghi nhận trung thực các case đạt/chưa đạt. | `starter_v0/artifacts/versions/v2/system_prompt.md`, `starter_v0/data/eval_group.json`, `starter_v0/runs/v2_B_base_...json`, `starter_v0/runs/v3_B_group_...json`. |
-| Đinh Kim Thái | 2A202602417 | Chưa cung cấp | **Prompt/Safety Engineer v3.** Hoàn thiện phần cuối CP2 và CP3: tối ưu routing/arguments và trust boundary cho v3; chạy bộ 12 adversarial cases; kiểm tra thiếu thông tin, sửa/hủy/xác nhận và chuẩn bị transcript minh chứng cho demo. | `starter_v0/artifacts/versions/v3/system_prompt.md`, `starter_v0/runs/v3_B_base_...json`, `starter_v0/runs/v3_B_adversarial_...json`, `starter_v0/transcripts/v3_...transcript.json`. |
+| Đinh Kim Thái | 2A202602417 | <https://github.com/thaidinh1206> | **Prompt/Safety Engineer v3.** Hoàn thiện phần cuối CP2 và CP3: tối ưu routing/arguments và trust boundary cho v3; chạy bộ 12 adversarial cases; kiểm tra thiếu thông tin, sửa/hủy/xác nhận và chuẩn bị transcript minh chứng cho demo. | `starter_v0/artifacts/versions/v3/system_prompt.md`, `starter_v0/runs/v3_B_base_...json`, `starter_v0/runs/v3_B_adversarial_...json`, `starter_v0/transcripts/v3_...transcript.json`. |
 
 ## Tiến độ theo checkpoint
 
@@ -83,9 +83,8 @@
 
 ## Xác nhận trước khi nộp
 
-- [x] Có đủ bốn thành viên, MSSV và ba GitHub đã được cung cấp.
+- [x] Có đủ bốn thành viên, MSSV và GitHub.
 - [x] Vai trò bám theo v0 → v3 và checkpoint CP0 → FINAL.
 - [x] Có người phụ trách sinh test, adversarial test, UI, report và tích hợp.
-- [ ] Bổ sung GitHub của Đinh Kim Thái.
 - [ ] Cập nhật nhánh và commit chốt theo bản nộp cuối.
 - [ ] Mỗi thành viên đọc lại phần INDIVIDUAL và tự nộp cùng URL repo trên VLearn.
